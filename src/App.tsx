@@ -9,6 +9,7 @@ import { migrateColors } from './db/colors'
 import { seedIfEmpty } from './db/seed'
 import { currentMonthKey } from './lib/dates'
 import { materializeRecurring } from './state/recurring'
+import { applyTheme, getThemePref, watchSystemTheme } from './lib/theme'
 
 export default function App() {
   const [tab, setTab] = useState<Tab>('board')
@@ -26,6 +27,13 @@ export default function App() {
     return () => {
       cancelled = true
     }
+  }, [])
+
+  // Тема применяется инлайн-скриптом до отрисовки; здесь только следим за
+  // системной темой, пока выбран режим «Система».
+  useEffect(() => {
+    applyTheme(getThemePref())
+    return watchSystemTheme()
   }, [])
 
   const screen = useMemo(() => {

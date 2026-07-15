@@ -48,8 +48,7 @@
   --safe-bottom: env(safe-area-inset-bottom, 0px);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
+:root[data-theme='dark'] {
     color-scheme: dark;
 
     --bg: #1b1815;
@@ -78,7 +77,6 @@
     --grain-op: 0.4;
     --grain-blend: screen;
     --grain-lum: 1;
-  }
 }
 
 * {
@@ -220,6 +218,33 @@ button {
   text-transform: uppercase;
   color: var(--faint);
   margin: 22px 6px 12px;
+}
+
+/* ---------- сегментированный переключатель ---------- */
+
+.segmented {
+  display: flex;
+  gap: 4px;
+  padding: 4px;
+  background: var(--surface-3);
+  border: 1px solid var(--border);
+  border-radius: 15px;
+}
+
+.segmented button {
+  flex: 1;
+  padding: 10px 0;
+  border-radius: 11px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--muted);
+  transition: color 0.15s, background 0.2s, box-shadow 0.2s;
+}
+
+.segmented button.active {
+  color: var(--text);
+  background: var(--surface);
+  box-shadow: var(--shadow-1);
 }
 
 /* ---------- монеты ---------- */

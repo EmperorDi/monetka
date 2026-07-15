@@ -7,10 +7,18 @@ import { useAccounts, useBalances, useCategories, useCurrency, useIncomes } from
 import { EntityEditor, type EntityKind } from './EntityEditor'
 import { RecurringEditor } from './RecurringEditor'
 import { exportCSV, exportJSON, importJSON } from '../lib/backup'
+import { getThemePref, setThemePref, type ThemePref } from '../lib/theme'
 
 const PERIOD_LABEL = { weekly: 'каждую неделю', monthly: 'каждый месяц' } as const
 
+const THEME_OPTIONS: { value: ThemePref; label: string }[] = [
+  { value: 'light', label: 'Светлая' },
+  { value: 'dark', label: 'Тёмная' },
+  { value: 'system', label: 'Система' },
+]
+
 export function Settings() {
+  const [theme, setTheme] = useState<ThemePref>(getThemePref())
   const incomes = useIncomes()
   const accounts = useAccounts()
   const categories = useCategories()
@@ -34,7 +42,23 @@ export function Settings() {
 
   return (
     <div className="screen">
-      <div className="section-label" style={{ marginTop: 6 }}>Счета</div>
+      <div className="section-label" style={{ marginTop: 6 }}>Оформление</div>
+      <div className="segmented">
+        {THEME_OPTIONS.map((o) => (
+          <button
+            key={o.value}
+            className={theme === o.value ? 'active' : ''}
+            onClick={() => {
+              setTheme(o.value)
+              setThemePref(o.value)
+            }}
+          >
+            {o.label}
+          </button>
+        ))}
+      </div>
+
+      <div className="section-label">Счета</div>
       {accounts.map((a) => (
         <button key={a.id} className="set-item" style={{ '--coin': a.color } as React.CSSProperties} onClick={() => setEditor({ kind: 'account', entity: a })}>
           <span className="ico">{a.icon}</span>
