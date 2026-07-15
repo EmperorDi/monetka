@@ -36,7 +36,7 @@ export function Stats({ month }: { month: string }) {
       const rest = rows.slice(7)
       return [
         ...rows.slice(0, 7),
-        { name: 'Прочее', color: '#5a6280', icon: '•', value: rest.reduce((s, r) => s + r.value, 0) },
+        { name: 'Прочее', color: '#9c9384', icon: '•', value: rest.reduce((s, r) => s + r.value, 0) },
       ]
     }
     return rows

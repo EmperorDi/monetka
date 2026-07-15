@@ -17,7 +17,7 @@ export interface CoinBubbleProps {
 
 function ringColor(pct: number): string {
   if (pct >= 1) return 'var(--red)'
-  if (pct >= 0.75) return '#ffb26b'
+  if (pct >= 0.75) return 'var(--gold)'
   return 'var(--green)'
 }
 

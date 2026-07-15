@@ -29,7 +29,7 @@ export interface TxView {
   sub: string
 }
 
-const GONE = { name: 'Удалено', icon: '❔', color: '#5a6280' }
+const GONE = { name: 'Удалено', icon: '❔', color: '#a89e8d' }
 
 export function txView(t: Tx, maps: EntityMaps): TxView {
   if (t.type === 'income') {
@@ -51,7 +51,7 @@ export function txView(t: Tx, maps: EntityMaps): TxView {
   const from = maps.accountById.get(t.fromId) ?? GONE
   const to = maps.accountById.get(t.toId) ?? GONE
   return {
-    icon: '🔁', color: '#4fc3f7', title: `${from.name} → ${to.name}`,
+    icon: '🔁', color: '#3f7fb4', title: `${from.name} → ${to.name}`,
     sub: t.note ?? 'Перевод',
   }
 }

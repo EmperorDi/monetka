@@ -5,6 +5,7 @@ import { Feed } from './components/Feed'
 import { Settings } from './components/Settings'
 import { Stats } from './components/Stats'
 import { TabBar, type Tab } from './components/TabBar'
+import { migrateColors } from './db/colors'
 import { seedIfEmpty } from './db/seed'
 import { currentMonthKey } from './lib/dates'
 import { materializeRecurring } from './state/recurring'
@@ -18,6 +19,7 @@ export default function App() {
     let cancelled = false
     ;(async () => {
       await seedIfEmpty()
+      await migrateColors()
       await materializeRecurring()
       if (!cancelled) setReady(true)
     })()

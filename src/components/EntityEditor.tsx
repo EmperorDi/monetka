@@ -12,8 +12,8 @@ const KIND_TITLES: Record<EntityKind, [string, string]> = {
 }
 
 const COLORS = [
-  '#43a047', '#3987e5', '#c98500', '#9085e9', '#d55181', '#12a5b8',
-  '#d95926', '#7286e8', '#f6c945', '#ffb26b', '#3ddc97', '#4fc3f7',
+  '#3f9068', '#3f7fb4', '#b5872f', '#9166a8', '#cc5b45', '#0d949c',
+  '#c6792e', '#5a63cc', '#5a7d3e', '#4b8a86', '#a8794f', '#8a7d6b',
 ]
 
 const DEFAULT_ICONS: Record<EntityKind, string> = { income: '💰', account: '💳', category: '🧺' }

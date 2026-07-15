@@ -1,29 +1,84 @@
 @import '@fontsource/golos-text/400.css';
 @import '@fontsource/golos-text/500.css';
 @import '@fontsource/golos-text/600.css';
-@import '@fontsource/unbounded/500.css';
-@import '@fontsource/unbounded/600.css';
+@import '@fontsource/spectral/500.css';
+@import '@fontsource/spectral/600.css';
+
+/* ==========================================================================
+   «Монетка» — тёплая фарфоровая тема. Светлая по умолчанию, тёплый уголь
+   в тёмном режиме. Вся палитра — приглушённые самоцветные тона (проверены
+   валидатором dataviz на обеих поверхностях).
+   ========================================================================== */
 
 :root {
-  --bg: #0b1020;
-  --bg-glow: #141c3a;
-  --surface: #131a2f;
-  --surface-2: #1b2440;
-  --surface-3: #232e52;
-  --border: rgba(255, 255, 255, 0.07);
-  --text: #eef1fa;
-  --muted: #8a93b0;
-  --faint: #5a6280;
-  --gold: #f6c945;
-  --gold-deep: #d4a017;
-  --green: #3ddc97;
-  --red: #ff6b7a;
-  --blue: #4fc3f7;
-  --radius: 20px;
+  color-scheme: light;
+
+  --bg: #ece4d6;
+  --bg-glow: #f4efe5;
+  --bg-tint: #efe3d1;
+  --surface: #f8f3ec;
+  --surface-2: #f4eee4;
+  --surface-3: #ebe3d5;
+  --border: rgba(74, 58, 36, 0.11);
+
+  --text: #34302a;
+  --muted: #7c7365;
+  --faint: #ab9f8c;
+
+  --gold: #ab8240;
+  --gold-deep: #876128;
+  --green: #3f8f68;
+  --red: #c8583f;
+  --blue: #3f7fb4;
+
+  /* мягкие тёплые тени */
+  --shadow-1: 0 1px 2px rgba(64, 48, 28, 0.05), 0 3px 10px rgba(64, 48, 28, 0.06);
+  --shadow-2: 0 10px 30px rgba(58, 44, 26, 0.14);
+  --coin-drop: 0 5px 14px rgba(70, 52, 30, 0.16);
+  --coin-hi: rgba(255, 255, 255, 0.6);
+  --coin-lo: rgba(92, 70, 44, 0.12);
+  --grain-op: 0.5;
+  --grain-blend: multiply;
+  --grain-lum: 0;
+
+  --radius: 22px;
   --font-body: 'Golos Text', -apple-system, sans-serif;
-  --font-display: 'Unbounded', 'Golos Text', sans-serif;
+  --font-display: 'Spectral', Georgia, serif;
   --safe-top: env(safe-area-inset-top, 0px);
   --safe-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+
+    --bg: #1b1815;
+    --bg-glow: #262019;
+    --bg-tint: #241c14;
+    --surface: #24201b;
+    --surface-2: #2a251f;
+    --surface-3: #332c24;
+    --border: rgba(255, 244, 224, 0.09);
+
+    --text: #f0ebe0;
+    --muted: #a89e8d;
+    --faint: #726758;
+
+    --gold: #cba566;
+    --gold-deep: #a9843f;
+    --green: #5aa87e;
+    --red: #e07458;
+    --blue: #6a9bd0;
+
+    --shadow-1: 0 1px 2px rgba(0, 0, 0, 0.3), 0 4px 14px rgba(0, 0, 0, 0.34);
+    --shadow-2: 0 14px 34px rgba(0, 0, 0, 0.55);
+    --coin-drop: 0 6px 16px rgba(0, 0, 0, 0.45);
+    --coin-hi: rgba(255, 255, 255, 0.12);
+    --coin-lo: rgba(0, 0, 0, 0.4);
+    --grain-op: 0.4;
+    --grain-blend: screen;
+    --grain-lum: 1;
+  }
 }
 
 * {
@@ -57,22 +112,22 @@ body {
   flex-direction: column;
   position: relative;
   overflow: hidden;
-  /* атмосфера: два мягких свечения поверх чернильного фона */
   background:
-    radial-gradient(120% 55% at 50% -10%, var(--bg-glow) 0%, transparent 60%),
-    radial-gradient(90% 40% at 85% 110%, #1a1430 0%, transparent 55%),
+    radial-gradient(135% 62% at 50% -18%, var(--bg-glow) 0%, transparent 58%),
+    radial-gradient(85% 48% at 88% 112%, var(--bg-tint) 0%, transparent 56%),
     var(--bg);
 }
 
-/* зернистость поверх фона */
+/* тонкая бумажная зернистость */
 #root::before {
   content: '';
   position: absolute;
   inset: 0;
   pointer-events: none;
-  opacity: 0.35;
+  opacity: var(--grain-op);
+  mix-blend-mode: var(--grain-blend);
   z-index: 0;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.04 0'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.5 0'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
 input,
@@ -95,7 +150,7 @@ button {
   flex: 1;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
-  padding: calc(var(--safe-top) + 8px) 16px calc(var(--safe-bottom) + 84px);
+  padding: calc(var(--safe-top) + 8px) 18px calc(var(--safe-bottom) + 88px);
   position: relative;
   z-index: 1;
 }
@@ -104,65 +159,67 @@ button {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 6px 2px 14px;
+  padding: 6px 4px 16px;
 }
 
 .month-switch {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 2px;
 }
 
 .month-switch button {
-  width: 34px;
-  height: 34px;
+  width: 36px;
+  height: 36px;
   border-radius: 12px;
   color: var(--muted);
-  font-size: 16px;
+  font-size: 19px;
   display: grid;
   place-items: center;
-  transition: background 0.15s;
+  transition: background 0.15s, color 0.15s;
 }
 
 .month-switch button:active {
-  background: var(--surface-2);
+  background: var(--surface-3);
+  color: var(--text);
 }
 
 .month-title {
   font-family: var(--font-display);
   font-weight: 600;
-  font-size: 15px;
-  letter-spacing: 0.02em;
-  min-width: 110px;
+  font-size: 21px;
+  letter-spacing: 0.01em;
+  min-width: 118px;
   text-align: center;
 }
 
 .header-totals {
   text-align: right;
-  line-height: 1.25;
+  line-height: 1.2;
 }
 
 .header-totals .spent {
   font-family: var(--font-display);
-  font-size: 15px;
+  font-size: 19px;
   font-weight: 600;
-  color: var(--gold);
+  color: var(--text);
   font-variant-numeric: tabular-nums;
 }
 
 .header-totals .label {
-  font-size: 11px;
+  font-size: 10.5px;
   color: var(--faint);
-  letter-spacing: 0.04em;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
 }
 
 .section-label {
   font-size: 11px;
   font-weight: 600;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--faint);
-  margin: 18px 4px 10px;
+  margin: 22px 6px 12px;
 }
 
 /* ---------- монеты ---------- */
@@ -170,25 +227,37 @@ button {
 .coin-row {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 14px 6px;
+  gap: 18px 8px;
 }
 
 .coin {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 5px;
+  gap: 7px;
   touch-action: none;
   position: relative;
+  animation: coinIn 0.42s cubic-bezier(0.22, 0.8, 0.3, 1) both;
+}
+
+.coin-row .coin:nth-child(1) { animation-delay: 0.02s; }
+.coin-row .coin:nth-child(2) { animation-delay: 0.06s; }
+.coin-row .coin:nth-child(3) { animation-delay: 0.1s; }
+.coin-row .coin:nth-child(4) { animation-delay: 0.14s; }
+.coin-row .coin:nth-child(n+5) { animation-delay: 0.16s; }
+
+@keyframes coinIn {
+  from { opacity: 0; transform: translateY(9px) scale(0.96); }
+  to { opacity: 1; transform: none; }
 }
 
 .coin-ring {
-  width: 62px;
-  height: 62px;
+  width: 64px;
+  height: 64px;
   border-radius: 50%;
   padding: 3px;
-  background: var(--ring, rgba(255, 255, 255, 0.08));
-  transition: transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.18s;
+  background: var(--ring, transparent);
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s;
 }
 
 .coin-face {
@@ -197,41 +266,45 @@ button {
   border-radius: 50%;
   display: grid;
   place-items: center;
-  font-size: 25px;
+  font-size: 26px;
   background:
-    radial-gradient(circle at 32% 28%, color-mix(in srgb, var(--coin) 55%, #ffffff 12%) 0%, color-mix(in srgb, var(--coin) 38%, var(--surface) 62%) 70%);
-  border: 1px solid color-mix(in srgb, var(--coin) 45%, transparent);
+    radial-gradient(circle at 34% 28%,
+      color-mix(in srgb, var(--coin) 40%, #fff 34%) 0%,
+      color-mix(in srgb, var(--coin) 30%, var(--surface) 62%) 74%);
+  border: 1px solid color-mix(in srgb, var(--coin) 34%, transparent);
   box-shadow:
-    inset 0 -6px 12px rgba(0, 0, 0, 0.35),
-    inset 0 4px 8px rgba(255, 255, 255, 0.08),
-    0 6px 16px rgba(0, 0, 0, 0.35);
+    inset 0 3px 6px var(--coin-hi),
+    inset 0 -7px 13px var(--coin-lo),
+    var(--coin-drop);
 }
 
 .coin.drag-source .coin-ring {
-  transform: scale(0.88);
-  opacity: 0.45;
+  transform: scale(0.86);
+  opacity: 0.4;
 }
 
 .coin.drop-target .coin-ring {
-  transform: scale(1.14);
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--coin) 70%, white 10%), 0 0 24px color-mix(in srgb, var(--coin) 60%, transparent);
+  transform: scale(1.16);
+  box-shadow:
+    0 0 0 3px color-mix(in srgb, var(--coin) 60%, transparent),
+    0 0 26px color-mix(in srgb, var(--coin) 45%, transparent);
 }
 
 .coin-name {
-  font-size: 11px;
+  font-size: 11.5px;
   font-weight: 500;
   color: var(--text);
-  max-width: 76px;
+  max-width: 78px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
 .coin-sum {
-  font-size: 10.5px;
+  font-size: 11px;
   color: var(--muted);
   font-variant-numeric: tabular-nums;
-  margin-top: -3px;
+  margin-top: -4px;
 }
 
 .coin-sum.over {
@@ -244,23 +317,25 @@ button {
   position: fixed;
   left: 0;
   top: 0;
-  width: 56px;
-  height: 56px;
+  width: 58px;
+  height: 58px;
   border-radius: 50%;
   display: grid;
   place-items: center;
-  font-size: 24px;
+  font-size: 25px;
   pointer-events: none;
   z-index: 100;
-  background: radial-gradient(circle at 32% 28%, color-mix(in srgb, var(--coin) 60%, #fff 15%), color-mix(in srgb, var(--coin) 40%, #111 30%));
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.55), 0 0 0 2px color-mix(in srgb, var(--coin) 60%, transparent);
-  transform: translate(-50%, -60%) scale(1.05);
+  background: radial-gradient(circle at 34% 28%,
+    color-mix(in srgb, var(--coin) 44%, #fff 34%),
+    color-mix(in srgb, var(--coin) 34%, var(--surface) 40%));
+  box-shadow: 0 16px 34px rgba(40, 28, 14, 0.4), 0 0 0 2px color-mix(in srgb, var(--coin) 48%, transparent);
+  transform: translate(-50%, -60%) scale(1.06);
   will-change: left, top;
 }
 
 .coin.add-coin .coin-face {
   background: transparent;
-  border: 1.5px dashed var(--faint);
+  border: 1.5px dashed color-mix(in srgb, var(--faint) 80%, transparent);
   box-shadow: none;
   color: var(--faint);
   font-size: 22px;
@@ -271,11 +346,11 @@ button {
 .sheet-backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(4, 6, 16, 0.66);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
+  background: color-mix(in srgb, var(--bg) 40%, rgba(20, 14, 6, 0.55));
+  backdrop-filter: blur(7px) saturate(1.1);
+  -webkit-backdrop-filter: blur(7px) saturate(1.1);
   z-index: 50;
-  animation: fadeIn 0.18s ease;
+  animation: fadeIn 0.2s ease;
 }
 
 .sheet {
@@ -284,17 +359,18 @@ button {
   right: 0;
   bottom: 0;
   z-index: 51;
-  background: linear-gradient(180deg, var(--surface-2), var(--surface));
-  border-radius: 26px 26px 0 0;
+  background: var(--surface);
+  border-radius: 28px 28px 0 0;
   border-top: 1px solid var(--border);
   padding: 18px 18px calc(var(--safe-bottom) + 16px);
-  animation: slideUp 0.24s cubic-bezier(0.32, 0.72, 0.24, 1);
-  max-height: 88dvh;
+  box-shadow: var(--shadow-2);
+  animation: slideUp 0.26s cubic-bezier(0.32, 0.72, 0.24, 1);
+  max-height: 90dvh;
   overflow-y: auto;
 }
 
 @keyframes slideUp {
-  from { transform: translateY(40px); opacity: 0.4; }
+  from { transform: translateY(44px); opacity: 0.5; }
   to { transform: translateY(0); opacity: 1; }
 }
 
@@ -304,11 +380,20 @@ button {
 }
 
 .sheet-grip {
-  width: 40px;
+  width: 42px;
   height: 4px;
   border-radius: 2px;
   background: var(--surface-3);
-  margin: 0 auto 14px;
+  margin: 0 auto 16px;
+}
+
+.sheet-kicker {
+  text-align: center;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--faint);
+  margin-bottom: 14px;
 }
 
 .flow-chips {
@@ -322,14 +407,15 @@ button {
 .flow-chip {
   display: flex;
   align-items: center;
-  gap: 7px;
-  background: var(--surface-3);
+  gap: 8px;
+  background: var(--surface-2);
   border: 1px solid var(--border);
-  border-radius: 14px;
-  padding: 8px 12px;
-  font-size: 13px;
+  border-radius: 15px;
+  padding: 9px 13px;
+  font-size: 13.5px;
   font-weight: 500;
   max-width: 42vw;
+  transition: border-color 0.15s, box-shadow 0.15s;
 }
 
 .flow-chip .ico {
@@ -349,25 +435,25 @@ button {
 
 .flow-arrow {
   color: var(--faint);
-  font-size: 15px;
+  font-size: 16px;
 }
 
 .amount-display {
   font-family: var(--font-display);
   font-weight: 600;
-  font-size: 40px;
+  font-size: 46px;
   text-align: center;
-  padding: 14px 0 4px;
-  color: var(--gold);
+  padding: 16px 0 4px;
+  color: var(--text);
   font-variant-numeric: tabular-nums;
-  min-height: 68px;
-  letter-spacing: 0.01em;
+  min-height: 74px;
+  letter-spacing: 0.005em;
 }
 
 .amount-display .cur {
-  font-size: 24px;
-  color: var(--muted);
-  margin-left: 6px;
+  font-size: 26px;
+  color: var(--faint);
+  margin-left: 7px;
 }
 
 .amount-display.zero {
@@ -377,44 +463,46 @@ button {
 .numpad {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 8px;
+  gap: 9px;
   margin: 10px 0;
 }
 
 .numpad button {
-  height: 54px;
-  border-radius: 16px;
-  background: var(--surface-3);
-  font-size: 22px;
+  height: 56px;
+  border-radius: 17px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  font-family: var(--font-display);
+  font-size: 23px;
   font-weight: 500;
   color: var(--text);
   transition: background 0.1s, transform 0.1s;
 }
 
 .numpad button:active {
-  background: var(--surface-2);
+  background: var(--surface-3);
   transform: scale(0.96);
 }
 
 .pick-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 12px 6px;
-  margin: 14px 0;
+  gap: 16px 8px;
+  margin: 16px 0;
 }
 
 .meta-row {
   display: flex;
-  gap: 8px;
+  gap: 9px;
   margin: 4px 0 12px;
 }
 
 .meta-row input {
   flex: 1;
-  background: var(--surface-3);
+  background: var(--surface-2);
   border: 1px solid var(--border);
-  border-radius: 14px;
-  padding: 11px 13px;
+  border-radius: 15px;
+  padding: 12px 14px;
   font-size: 14px;
   color: var(--text);
   min-width: 0;
@@ -428,7 +516,7 @@ button {
 
 .meta-row input[type='date'] {
   flex: 0 0 41%;
-  color-scheme: dark;
+  color-scheme: light dark;
 }
 
 .sheet-actions {
@@ -438,32 +526,33 @@ button {
 
 .btn-primary {
   flex: 1;
-  height: 52px;
-  border-radius: 16px;
+  height: 54px;
+  border-radius: 17px;
   background: linear-gradient(135deg, var(--gold), var(--gold-deep));
-  color: #201a04;
+  color: #fdf8ee;
   font-size: 16px;
   font-weight: 600;
   letter-spacing: 0.01em;
-  box-shadow: 0 8px 20px rgba(246, 201, 69, 0.22);
+  box-shadow: 0 8px 20px color-mix(in srgb, var(--gold) 30%, transparent);
   transition: transform 0.12s, filter 0.12s;
 }
 
 .btn-primary:active {
   transform: scale(0.98);
-  filter: brightness(1.08);
+  filter: brightness(1.06);
 }
 
 .btn-primary:disabled {
-  filter: grayscale(0.8) brightness(0.6);
+  background: var(--surface-3);
+  color: var(--faint);
   box-shadow: none;
 }
 
 .btn-danger {
-  width: 52px;
-  height: 52px;
-  border-radius: 16px;
-  background: color-mix(in srgb, var(--red) 16%, var(--surface-3));
+  width: 54px;
+  height: 54px;
+  border-radius: 17px;
+  background: color-mix(in srgb, var(--red) 14%, var(--surface-2));
   color: var(--red);
   font-size: 19px;
 }
@@ -472,7 +561,7 @@ button {
   height: 44px;
   padding: 0 16px;
   border-radius: 14px;
-  background: var(--surface-3);
+  background: var(--surface-2);
   color: var(--muted);
   font-size: 14px;
   font-weight: 500;
@@ -484,13 +573,13 @@ button {
   display: flex;
   justify-content: space-between;
   align-items: baseline;
-  padding: 14px 4px 8px;
+  padding: 16px 6px 9px;
 }
 
 .feed-day-head .d {
-  font-size: 12px;
+  font-size: 11.5px;
   font-weight: 600;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--faint);
 }
@@ -505,28 +594,34 @@ button {
   width: 100%;
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 13px;
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 18px;
-  padding: 11px 14px;
-  margin-bottom: 8px;
+  padding: 12px 15px;
+  margin-bottom: 9px;
   text-align: left;
-  transition: background 0.12s;
+  box-shadow: var(--shadow-1);
+  transition: transform 0.12s, background 0.12s;
 }
 
 .tx-row:active {
+  transform: scale(0.99);
   background: var(--surface-2);
 }
 
 .tx-ico {
-  width: 40px;
-  height: 40px;
-  border-radius: 13px;
+  width: 42px;
+  height: 42px;
+  border-radius: 14px;
   display: grid;
   place-items: center;
-  font-size: 19px;
-  background: color-mix(in srgb, var(--coin, #888) 20%, var(--surface-2));
+  font-size: 20px;
+  background:
+    radial-gradient(circle at 34% 28%,
+      color-mix(in srgb, var(--coin, #888) 30%, #fff 28%),
+      color-mix(in srgb, var(--coin, #888) 22%, var(--surface-2)));
+  border: 1px solid color-mix(in srgb, var(--coin, #888) 24%, transparent);
   flex-shrink: 0;
 }
 
@@ -536,7 +631,7 @@ button {
 }
 
 .tx-title {
-  font-size: 14px;
+  font-size: 14.5px;
   font-weight: 500;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -552,7 +647,8 @@ button {
 }
 
 .tx-amt {
-  font-size: 14.5px;
+  font-family: var(--font-display);
+  font-size: 16px;
   font-weight: 600;
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
@@ -565,15 +661,16 @@ button {
 .empty-state {
   text-align: center;
   color: var(--faint);
-  padding: 60px 20px;
+  padding: 64px 20px;
   font-size: 14px;
+  line-height: 1.6;
 }
 
 .empty-state .big {
-  font-size: 40px;
+  font-size: 42px;
   display: block;
-  margin-bottom: 12px;
-  opacity: 0.7;
+  margin-bottom: 14px;
+  opacity: 0.8;
 }
 
 /* ---------- статистика ---------- */
@@ -582,30 +679,46 @@ button {
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  padding: 16px;
+  padding: 18px;
   margin-bottom: 14px;
+  box-shadow: var(--shadow-1);
 }
 
 .stat-card h3 {
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 600;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--muted);
-  margin-bottom: 12px;
+  margin-bottom: 14px;
+}
+
+.stat-tile-label {
+  font-size: 10.5px;
+  color: var(--faint);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.stat-tile-value {
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  margin-top: 4px;
 }
 
 .legend-row {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 7px 0;
+  gap: 11px;
+  padding: 8px 0;
   font-size: 13.5px;
 }
 
 .legend-dot {
-  width: 10px;
-  height: 10px;
+  width: 11px;
+  height: 11px;
   border-radius: 4px;
   flex-shrink: 0;
 }
@@ -625,7 +738,7 @@ button {
 .legend-pct {
   font-variant-numeric: tabular-nums;
   color: var(--faint);
-  width: 38px;
+  width: 40px;
   text-align: right;
   font-size: 12px;
 }
@@ -636,27 +749,34 @@ button {
   width: 100%;
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 13px;
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 18px;
-  padding: 12px 14px;
-  margin-bottom: 8px;
+  padding: 13px 15px;
+  margin-bottom: 9px;
   text-align: left;
+  box-shadow: var(--shadow-1);
+  transition: transform 0.12s, background 0.12s;
 }
 
 .set-item:active {
+  transform: scale(0.99);
   background: var(--surface-2);
 }
 
 .set-item .ico {
-  width: 38px;
-  height: 38px;
-  border-radius: 12px;
+  width: 40px;
+  height: 40px;
+  border-radius: 13px;
   display: grid;
   place-items: center;
-  font-size: 18px;
-  background: color-mix(in srgb, var(--coin, #888) 22%, var(--surface-2));
+  font-size: 19px;
+  background:
+    radial-gradient(circle at 34% 28%,
+      color-mix(in srgb, var(--coin, #888) 30%, #fff 26%),
+      color-mix(in srgb, var(--coin, #888) 22%, var(--surface-2)));
+  border: 1px solid color-mix(in srgb, var(--coin, #888) 22%, transparent);
   flex-shrink: 0;
 }
 
@@ -677,24 +797,24 @@ button {
 }
 
 .form-field {
-  margin-bottom: 12px;
+  margin-bottom: 13px;
 }
 
 .form-field label {
   display: block;
   font-size: 12px;
   color: var(--muted);
-  margin-bottom: 6px;
-  letter-spacing: 0.03em;
+  margin-bottom: 7px;
+  letter-spacing: 0.02em;
 }
 
 .form-field input,
 .form-field select {
   width: 100%;
-  background: var(--surface-3);
+  background: var(--surface-2);
   border: 1px solid var(--border);
-  border-radius: 14px;
-  padding: 12px 13px;
+  border-radius: 15px;
+  padding: 13px 14px;
   font-size: 15px;
   color: var(--text);
   user-select: text;
@@ -702,7 +822,7 @@ button {
 }
 
 .form-field input[type='date'] {
-  color-scheme: dark;
+  color-scheme: light dark;
 }
 
 .form-field select {
@@ -712,32 +832,33 @@ button {
 
 .swatches {
   display: flex;
-  gap: 9px;
+  gap: 10px;
   flex-wrap: wrap;
 }
 
 .swatch {
-  width: 34px;
-  height: 34px;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
   border: 2px solid transparent;
-  transition: transform 0.12s;
+  box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.35), inset 0 -3px 6px rgba(0, 0, 0, 0.12);
+  transition: transform 0.12s, border-color 0.12s;
 }
 
 .swatch.sel {
-  border-color: #fff;
+  border-color: var(--text);
   transform: scale(1.12);
 }
 
 .note-box {
-  background: color-mix(in srgb, var(--gold) 7%, var(--surface));
-  border: 1px solid color-mix(in srgb, var(--gold) 22%, transparent);
+  background: color-mix(in srgb, var(--gold) 8%, var(--surface));
+  border: 1px solid color-mix(in srgb, var(--gold) 26%, transparent);
   border-radius: var(--radius);
-  padding: 13px 15px;
+  padding: 14px 16px;
   font-size: 12.5px;
   color: var(--muted);
-  line-height: 1.5;
-  margin: 14px 0;
+  line-height: 1.55;
+  margin: 16px 0;
 }
 
 /* ---------- таббар ---------- */
@@ -749,10 +870,10 @@ button {
   bottom: 0;
   z-index: 40;
   display: flex;
-  padding: 8px 10px calc(var(--safe-bottom) + 6px);
-  background: color-mix(in srgb, var(--bg) 82%, transparent);
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
+  padding: 9px 12px calc(var(--safe-bottom) + 7px);
+  background: color-mix(in srgb, var(--bg) 78%, transparent);
+  backdrop-filter: blur(20px) saturate(1.2);
+  -webkit-backdrop-filter: blur(20px) saturate(1.2);
   border-top: 1px solid var(--border);
 }
 
@@ -761,21 +882,26 @@ button {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 3px;
+  gap: 4px;
   padding: 5px 0;
   color: var(--faint);
   font-size: 10px;
   font-weight: 500;
   letter-spacing: 0.03em;
   border-radius: 12px;
-  transition: color 0.15s;
+  transition: color 0.18s, transform 0.18s;
 }
 
 .tabbar button.active {
   color: var(--gold);
 }
 
+.tabbar button.active svg {
+  transform: translateY(-1px);
+}
+
 .tabbar svg {
   width: 23px;
   height: 23px;
+  transition: transform 0.18s;
 }

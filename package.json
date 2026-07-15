@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "@fontsource/golos-text": "^5.2.8",
-    "@fontsource/unbounded": "^5.2.8",
+    "@fontsource/spectral": "^5.2.8",
     "dexie": "^4.4.4",
     "dexie-react-hooks": "^4.4.0",
     "react": "^19.2.7",
