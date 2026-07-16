@@ -21,6 +21,19 @@ export function fmtCompact(n: number): string {
   return fmtNum(n)
 }
 
+/**
+ * Пара «потрачено / бюджет» в едином масштабе (по большей величине),
+ * чтобы не было разнобоя вида «9 500 / 15 к» → «9,5 к / 15 к».
+ */
+export function fmtBudgetPair(spent: number, budget: number): string {
+  const maxAbs = Math.max(Math.abs(spent), Math.abs(budget))
+  let fmt: (v: number) => string
+  if (maxAbs >= 1_000_000) fmt = (v) => `${nf.format(Math.round(v / 100_000) / 10)} млн`
+  else if (maxAbs >= 10_000) fmt = (v) => `${nf.format(Math.round(v / 100) / 10)} к`
+  else fmt = fmtNum
+  return `${fmt(spent)} / ${fmt(budget)}`
+}
+
 export function parseAmount(s: string): number {
   const n = parseFloat(s.replace(',', '.'))
   return Number.isFinite(n) ? n : 0

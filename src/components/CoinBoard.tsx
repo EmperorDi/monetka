@@ -1,6 +1,6 @@
 import { useMemo, useRef, useState } from 'react'
 import type { PointerEvent as RPointerEvent } from 'react'
-import { fmtCompact } from '../lib/money'
+import { fmtBudgetPair, fmtCompact } from '../lib/money'
 import { monthAggOf, useAccounts, useBalances, useCategories, useIncomes, useMonthTx } from '../state/hooks'
 import { AmountModal, type TxDraft } from './AmountModal'
 import { AddCoin, CoinBubble } from './CoinBubble'
@@ -114,7 +114,7 @@ export function CoinBoard({ month }: { month: string }) {
   return (
     <div className="screen">
       <div className="section-label">Доходы</div>
-      <div className="coin-row">
+      <div className="coin-row compact">
         {incomes.map((s) => (
           <CoinBubble
             key={s.id}
@@ -133,7 +133,7 @@ export function CoinBoard({ month }: { month: string }) {
       </div>
 
       <div className="section-label">Счета</div>
-      <div className="coin-row">
+      <div className="coin-row compact">
         {accounts.map((a) => (
           <CoinBubble
             key={a.id}
@@ -164,7 +164,7 @@ export function CoinBoard({ month }: { month: string }) {
               icon={c.icon}
               name={c.name}
               color={c.color}
-              sub={fmtCompact(spent)}
+              sub={c.budget ? fmtBudgetPair(spent, c.budget) : fmtCompact(spent)}
               subOver={pct != null && pct >= 1}
               ringPct={pct}
               registerRef={registerTarget('category', c.id!)}
